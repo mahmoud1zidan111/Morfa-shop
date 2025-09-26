@@ -19,9 +19,7 @@ const theme = createTheme({
 export default function App() {
   return (
     <ThemeProvider theme={theme}>
-      <Container maxWidth="xl">
-        {/* <Box sx={{ bgcolor: "#cfe8fc", height: "100vh" }} /> */}
-      </Container>
+      <Container maxWidth="xl"></Container>
     </ThemeProvider>
   );
 }

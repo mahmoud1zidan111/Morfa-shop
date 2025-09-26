@@ -1,11 +1,11 @@
 import "./App.css";
-import SimpleContainer from "./contener";
-import PrimarySearchAppBar from "./Navbar";
+import SimpleContainer from "../src/componants/contener";
+import PrimarySearchAppBar from "../src/componants/Navbar";
 
 function App() {
   return (
     <div className="App">
-      <PrimarySearchAppBar />
+      <PrimarySearchAppBar></PrimarySearchAppBar>
       <SimpleContainer></SimpleContainer>
     </div>
   );

@@ -15,6 +15,8 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
+import LanguageSwitcher from "./Lang-bottom";
+import { useTranslation } from "react-i18next"; // ✅ استيراد الترجمة
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -23,7 +25,6 @@ const Search = styled("div")(({ theme }) => ({
   "&:hover": {
     backgroundColor: alpha(theme.palette.common.white, 0.25),
   },
-
   marginRight: theme.spacing(2),
   marginLeft: 0,
   width: "100%",
@@ -57,6 +58,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function PrimarySearchAppBar() {
+  const { t, i18n } = useTranslation(); // ✅ نجيب t (الترجمة) و i18n (اللغة)
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
@@ -97,8 +99,9 @@ export default function PrimarySearchAppBar() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      {/* {console.log(`is a translet ${t}`)} */}
+      <MenuItem onClick={handleMenuClose}>{t("profile")}</MenuItem>
+      <MenuItem onClick={handleMenuClose}>{t("my_account")}</MenuItem>
     </Menu>
   );
 
@@ -125,7 +128,7 @@ export default function PrimarySearchAppBar() {
             <MailIcon />
           </Badge>
         </IconButton>
-        <p>Messages</p>
+        <p>{t("messages")}</p>
       </MenuItem>
       <MenuItem>
         <IconButton
@@ -137,7 +140,7 @@ export default function PrimarySearchAppBar() {
             <NotificationsIcon />
           </Badge>
         </IconButton>
-        <p>Notifications</p>
+        <p>{t("notifications")}</p>
       </MenuItem>
       <MenuItem onClick={handleProfileMenuOpen}>
         <IconButton
@@ -149,14 +152,17 @@ export default function PrimarySearchAppBar() {
         >
           <AccountCircle />
         </IconButton>
-        <p>Profile</p>
+        <p>{t("profile")}</p>
+      </MenuItem>
+      <MenuItem>
+        <LanguageSwitcher color="black" />
       </MenuItem>
     </Menu>
   );
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static" sx={{ bgcolor: "#1E73BE" }}>
+      <AppBar position="static" sx={{ bgcolor: "#ىحة " }}>
         <Toolbar>
           <IconButton
             size="large"
@@ -173,19 +179,25 @@ export default function PrimarySearchAppBar() {
             component="div"
             sx={{ display: { xs: "none", sm: "block" } }}
           >
-            MUI
+            MORVA
           </Typography>
           <Search>
             <SearchIconWrapper>
               <SearchIcon />
             </SearchIconWrapper>
+            {/* ✅ الترجمة والاتجاه */}
             <StyledInputBase
-              placeholder="Search…"
-              inputProps={{ "aria-label": "search" }}
+              placeholder={t("search")}
+              inputProps={{
+                "aria-label": t("search"),
+                dir: i18n.language === "ar" ? "rtl" : "ltr",
+              }}
             />
           </Search>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
+            <LanguageSwitcher color="white" />
+
             <IconButton
               size="large"
               aria-label="show 4 new mails"
