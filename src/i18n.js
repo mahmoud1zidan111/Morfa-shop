@@ -5,16 +5,21 @@ import en from "./Languages/en/translation.json";
 import ar from "./Languages/ar/translation.json";
 import zh from "./Languages/zh/translation.json";
 
+const savedLang = localStorage.getItem("preferredLanguage") || "en";
+
 i18n.use(initReactI18next).init({
   resources: {
     en: { translation: en },
     ar: { translation: ar },
     zh: { translation: zh },
   },
-  lng: "en", // اللغة الافتراضية
+  lng: savedLang,
   fallbackLng: "en",
   interpolation: {
-    escapeValue: false, // React بيعمل escape لوحده
+    escapeValue: false,
+  },
+  react: {
+    useSuspense: false, // ✅ هنا تضيفها
   },
 });
 

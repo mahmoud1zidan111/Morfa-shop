@@ -16,15 +16,19 @@ import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import LanguageSwitcher from "./Lang-bottom";
-import { useTranslation } from "react-i18next"; // ✅ استيراد الترجمة
+import { useTranslation } from "react-i18next";
+
+import Drawer from "@mui/material/Drawer";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemText from "@mui/material/ListItemText";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
   borderRadius: theme.shape.borderRadius,
   backgroundColor: alpha(theme.palette.common.white, 0.15),
-  "&:hover": {
-    backgroundColor: alpha(theme.palette.common.white, 0.25),
-  },
+  "&:hover": { backgroundColor: alpha(theme.palette.common.white, 0.25) },
   marginRight: theme.spacing(2),
   marginLeft: 0,
   width: "100%",
@@ -33,6 +37,7 @@ const Search = styled("div")(({ theme }) => ({
     width: "auto",
   },
 }));
+
 const SearchIconWrapper = styled("div")(({ theme }) => ({
   padding: theme.spacing(0, 2),
   height: "100%",
@@ -47,30 +52,25 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   color: "inherit",
   "& .MuiInputBase-input": {
     padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
     transition: theme.transitions.create("width"),
     width: "100%",
-    [theme.breakpoints.up("md")]: {
-      width: "20ch",
-    },
+    [theme.breakpoints.up("md")]: { width: "20ch" },
   },
 }));
 
 export default function PrimarySearchAppBar() {
-  const { t, i18n } = useTranslation(); // ✅ نجيب t (الترجمة) و i18n (اللغة)
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+  const { t, i18n } = useTranslation();
+
+  const [anchorEl, setAnchorEl] = React.useState(null); // Profile Menu
+  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null); // Mobile Menu
+  const [drawerOpen, setDrawerOpen] = React.useState(false); // Drawer
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
-  };
-
-  const handleMobileMenuClose = () => {
-    setMobileMoreAnchorEl(null);
   };
 
   const handleMenuClose = () => {
@@ -82,48 +82,69 @@ export default function PrimarySearchAppBar() {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
+  const handleMobileMenuClose = () => {
+    setMobileMoreAnchorEl(null);
+  };
+
+  // ✅ الصفحات مترجمة
+  const pages = [
+    { key: "home", label: t("home") },
+    { key: "about", label: t("about") },
+    { key: "services", label: t("services") },
+    { key: "contact", label: t("contact") },
+  ];
+
+  // ✅ Drawer list
+  const drawerList = (
+    <Box
+      sx={{ width: 250 }}
+      role="presentation"
+      onClick={() => setDrawerOpen(false)}
+      onKeyDown={() => setDrawerOpen(false)}
+    >
+      <List>
+        {pages.map((page) => (
+          <ListItem key={page.key} disablePadding>
+            <ListItemButton>
+              <ListItemText primary={page.label} />
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
+    </Box>
+  );
+
+  // ✅ Menu Profile
   const menuId = "primary-search-account-menu";
   const renderMenu = (
     <Menu
       anchorEl={anchorEl}
-      anchorOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
+      anchorOrigin={{ vertical: "top", horizontal: "right" }}
       id={menuId}
       keepMounted
-      transformOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
+      transformOrigin={{ vertical: "top", horizontal: "right" }}
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      {/* {console.log(`is a translet ${t}`)} */}
       <MenuItem onClick={handleMenuClose}>{t("profile")}</MenuItem>
       <MenuItem onClick={handleMenuClose}>{t("my_account")}</MenuItem>
     </Menu>
   );
 
+  // ✅ Mobile Menu (3 نقط)
   const mobileMenuId = "primary-search-account-menu-mobile";
   const renderMobileMenu = (
     <Menu
       anchorEl={mobileMoreAnchorEl}
-      anchorOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
+      anchorOrigin={{ vertical: "top", horizontal: "right" }}
       id={mobileMenuId}
       keepMounted
-      transformOrigin={{
-        vertical: "top",
-        horizontal: "right",
-      }}
+      transformOrigin={{ vertical: "top", horizontal: "right" }}
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
       <MenuItem>
-        <IconButton size="large" aria-label="show 4 new mails" color="inherit">
+        <IconButton size="large" color="inherit">
           <Badge badgeContent={4} color="error">
             <MailIcon />
           </Badge>
@@ -131,11 +152,7 @@ export default function PrimarySearchAppBar() {
         <p>{t("messages")}</p>
       </MenuItem>
       <MenuItem>
-        <IconButton
-          size="large"
-          aria-label="show 17 new notifications"
-          color="inherit"
-        >
+        <IconButton size="large" color="inherit">
           <Badge badgeContent={17} color="error">
             <NotificationsIcon />
           </Badge>
@@ -143,13 +160,7 @@ export default function PrimarySearchAppBar() {
         <p>{t("notifications")}</p>
       </MenuItem>
       <MenuItem onClick={handleProfileMenuOpen}>
-        <IconButton
-          size="large"
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
-        >
+        <IconButton size="large" color="inherit">
           <AccountCircle />
         </IconButton>
         <p>{t("profile")}</p>
@@ -162,30 +173,29 @@ export default function PrimarySearchAppBar() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static" sx={{ bgcolor: "#ىحة " }}>
+      <AppBar position="static" sx={{ bgcolor: "#1976d2" }}>
         <Toolbar>
+          {/* ✅ زرار Drawer */}
           <IconButton
             size="large"
             edge="start"
             color="inherit"
-            aria-label="open drawer"
+            onClick={() => setDrawerOpen(true)}
             sx={{ mr: 2 }}
           >
             <MenuIcon />
           </IconButton>
-          <Typography
-            variant="h6"
-            noWrap
-            component="div"
-            sx={{ display: { xs: "none", sm: "block" } }}
-          >
+
+          {/* Logo */}
+          <Typography variant="h6" noWrap component="div">
             MORVA
           </Typography>
+
+          {/* ✅ Search */}
           <Search>
             <SearchIconWrapper>
               <SearchIcon />
             </SearchIconWrapper>
-            {/* ✅ الترجمة والاتجاه */}
             <StyledInputBase
               placeholder={t("search")}
               inputProps={{
@@ -194,24 +204,18 @@ export default function PrimarySearchAppBar() {
               }}
             />
           </Search>
+
           <Box sx={{ flexGrow: 1 }} />
+
+          {/* ✅ اكشن في الشاشات الكبيرة */}
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
             <LanguageSwitcher color="white" />
-
-            <IconButton
-              size="large"
-              aria-label="show 4 new mails"
-              color="inherit"
-            >
+            <IconButton size="large" color="inherit">
               <Badge badgeContent={4} color="error">
                 <MailIcon />
               </Badge>
             </IconButton>
-            <IconButton
-              size="large"
-              aria-label="show 17 new notifications"
-              color="inherit"
-            >
+            <IconButton size="large" color="inherit">
               <Badge badgeContent={17} color="error">
                 <NotificationsIcon />
               </Badge>
@@ -219,15 +223,16 @@ export default function PrimarySearchAppBar() {
             <IconButton
               size="large"
               edge="end"
-              aria-label="account of current user"
+              color="inherit"
               aria-controls={menuId}
               aria-haspopup="true"
               onClick={handleProfileMenuOpen}
-              color="inherit"
             >
               <AccountCircle />
             </IconButton>
           </Box>
+
+          {/* ✅ زرار 3 نقط يظهر بس في الموبايل */}
           <Box sx={{ display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
@@ -242,6 +247,16 @@ export default function PrimarySearchAppBar() {
           </Box>
         </Toolbar>
       </AppBar>
+
+      {/* ✅ Drawer يفتح من اليمين لو لغة عربي */}
+      <Drawer
+        anchor={i18n.language === "ar" ? "right" : "left"}
+        open={drawerOpen}
+        onClose={() => setDrawerOpen(false)}
+      >
+        {drawerList}
+      </Drawer>
+
       {renderMobileMenu}
       {renderMenu}
     </Box>

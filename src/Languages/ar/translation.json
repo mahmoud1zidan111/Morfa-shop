@@ -4,5 +4,13 @@
   "my_account": "حسابي",
   "messages": "الرسائل",
   "notifications": "الإشعارات",
-  "language": "اللغة"
+  "language": "اللغة",
+  "home": "الرائسيه",
+  "about": "عنا",
+  "services": "خدماتنا",
+  "contact": "تواصل معنا",
+  "computer_accessories": "إكسسوارات الكمبيوتر",
+  "electrical_appliances": "الأجهزة الكهربائية",
+  "watches": "ساعات",
+  "computers_laptops": "الحواسيب المحمولة و المكتبية"
 }

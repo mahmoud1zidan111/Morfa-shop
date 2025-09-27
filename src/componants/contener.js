@@ -2,8 +2,8 @@ import * as React from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Container from "@mui/material/Container";
 // import Box from "@mui/material/Box";
+import ActionAreaCard from "./cards";
 
-// إنشاء ثيم مخصص
 const theme = createTheme({
   breakpoints: {
     values: {
@@ -11,7 +11,7 @@ const theme = createTheme({
       sm: 600,
       md: 900,
       lg: 1200,
-      xl: 1800, // هنا كبرنا xl بدل 1536px
+      xl: 1800,
     },
   },
 });
@@ -19,7 +19,9 @@ const theme = createTheme({
 export default function App() {
   return (
     <ThemeProvider theme={theme}>
-      <Container maxWidth="xl"></Container>
+      <Container maxWidth="xl">
+        <ActionAreaCard />
+      </Container>
     </ThemeProvider>
   );
 }

@@ -4,5 +4,13 @@
   "my_account": "My account",
   "messages": "Messages",
   "notifications": "Notifications",
-  "language": "Language"
+  "language": "Language",
+  "home": "Home",
+  "about": "about",
+  "services": "services",
+  "contact": " contact",
+  "computer_accessories": "Computer accessories",
+  "electrical_appliances": "Electrical appliances",
+  "watches": "Watches",
+  "computers_laptops": "Computers & Laptops"
 }

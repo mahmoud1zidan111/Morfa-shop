@@ -4,5 +4,13 @@
   "my_account": "我的账户",
   "messages": "消息",
   "notifications": "通知",
-  "language": "语言"
+  "language": "语言",
+  "home": "主页",
+  "about": "关于我们",
+  "services": "服务",
+  "contact": "联系我们",
+  "computer_accessories": "电脑配件",
+  "electrical_appliances": "家用电器",
+  "watches": "手表",
+  "computers_laptops": "电脑和笔记本电脑"
 }
