@@ -1,18 +1,19 @@
 import "./App.css";
 import React, { useEffect } from "react";
-import i18n from "./i18n"; // ✅ إعدادات الترجمة
+import i18n from "./i18n";
 import SimpleContainer from "./componants/contener";
 import PrimarySearchAppBar from "./componants/Navbar";
 
-// ✅ استدعاء React Router
-import { BrowserRouter, Routes, Route, useParams } from "react-router-dom";
-import ActionAreaCard from "./componants/cards"; // لو ملف الكروت اسمه cards.js
+import Profile from "./Profile"; // عدّل المسار حسب مكان الملف
+import Account from "./Account"; // عدّل المسار حسب مكان الملف
 
-// ✅ صفحة تعرض تفاصيل المنتج حسب الرابط
+import { Routes, Route, useParams } from "react-router-dom";
+import ActionAreaCard from "./componants/cards";
+
 function ProductPage() {
   const { category, id } = useParams();
   return (
-    <div style={{ padding: "20px" }}>
+    <div style={{ padding: 20 }}>
       <h2>صفحة المنتج</h2>
       <p>الفئة: {category}</p>
       <p>المنتج رقم: {id}</p>
@@ -20,7 +21,7 @@ function ProductPage() {
   );
 }
 
-function App() {
+export default function App() {
   useEffect(() => {
     const savedLang = localStorage.getItem("preferredLanguage") || "en";
     i18n.changeLanguage(savedLang);
@@ -29,24 +30,23 @@ function App() {
 
   return (
     <div className="App">
-      {/* ✅ تغليف بالـ Router */}
-      <BrowserRouter>
-        {/* دايمًا النافبار فوق */}
-        <PrimarySearchAppBar />
+      <PrimarySearchAppBar />
 
-        <Routes>
-          {/* الصفحة الرئيسية زي ما هي */}
-          <Route path="/" element={<SimpleContainer />} />
+      <Routes>
+        <Route path="/" element={<SimpleContainer />} />
+        <Route path="/categories" element={<ActionAreaCard />} />
+        <Route path="/products/:category/:id" element={<ProductPage />} />
 
-          {/* صفحة فيها كروت المنتجات */}
-          <Route path="/categories" element={<ActionAreaCard />} />
+        {/* المهم: دول اللي كانوا ناقصين */}
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/account" element={<Account />} />
 
-          {/* صفحة تفاصيل أي منتج */}
-          <Route path="/products/:category/:id" element={<ProductPage />} />
-        </Routes>
-      </BrowserRouter>
+        {/* اختياري: صفحة لأي مسار غلط */}
+        <Route
+          path="*"
+          element={<div style={{ padding: 20 }}>صفحة غير موجودة</div>}
+        />
+      </Routes>
     </div>
   );
 }
-
-export default App;

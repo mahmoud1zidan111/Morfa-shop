@@ -12,17 +12,20 @@ import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import AccountCircle from "@mui/icons-material/AccountCircle";
-import MailIcon from "@mui/icons-material/Mail";
+// import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import LanguageSwitcher from "./Lang-bottom";
 import { useTranslation } from "react-i18next";
+import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 
 import Drawer from "@mui/material/Drawer";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
+
+import { Link as RouterLink } from "react-router-dom";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -75,6 +78,7 @@ export default function PrimarySearchAppBar() {
 
   const handleMenuClose = () => {
     setAnchorEl(null);
+    // alert("dkdkdk");
     handleMobileMenuClose();
   };
 
@@ -86,7 +90,6 @@ export default function PrimarySearchAppBar() {
     setMobileMoreAnchorEl(null);
   };
 
-  // ✅ الصفحات مترجمة
   const pages = [
     { key: "home", label: t("home") },
     { key: "about", label: t("about") },
@@ -94,7 +97,7 @@ export default function PrimarySearchAppBar() {
     { key: "contact", label: t("contact") },
   ];
 
-  // ✅ Drawer list
+  //  Drawer list
   const drawerList = (
     <Box
       sx={{ width: 250 }}
@@ -113,8 +116,7 @@ export default function PrimarySearchAppBar() {
       </List>
     </Box>
   );
-
-  // ✅ Menu Profile
+  // Menu Profile
   const menuId = "primary-search-account-menu";
   const renderMenu = (
     <Menu
@@ -126,12 +128,15 @@ export default function PrimarySearchAppBar() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>{t("profile")}</MenuItem>
-      <MenuItem onClick={handleMenuClose}>{t("my_account")}</MenuItem>
+      <MenuItem component={RouterLink} to="/profile" onClick={handleMenuClose}>
+        {t("profile")}
+      </MenuItem>
+      <MenuItem component={RouterLink} to="/account" onClick={handleMenuClose}>
+        {t("my_account")}
+      </MenuItem>
     </Menu>
   );
-
-  // ✅ Mobile Menu (3 نقط)
+  //  Mobile Menu
   const mobileMenuId = "primary-search-account-menu-mobile";
   const renderMobileMenu = (
     <Menu
@@ -146,7 +151,7 @@ export default function PrimarySearchAppBar() {
       <MenuItem>
         <IconButton size="large" color="inherit">
           <Badge badgeContent={4} color="error">
-            <MailIcon />
+            <ShoppingCartOutlinedIcon />
           </Badge>
         </IconButton>
         <p>{t("messages")}</p>
@@ -175,7 +180,7 @@ export default function PrimarySearchAppBar() {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static" sx={{ bgcolor: "#1976d2" }}>
         <Toolbar>
-          {/* ✅ زرار Drawer */}
+          {/* Drawer */}
           <IconButton
             size="large"
             edge="start"
@@ -191,7 +196,7 @@ export default function PrimarySearchAppBar() {
             MORVA
           </Typography>
 
-          {/* ✅ Search */}
+          {/* Search   */}
           <Search>
             <SearchIconWrapper>
               <SearchIcon />
@@ -207,12 +212,11 @@ export default function PrimarySearchAppBar() {
 
           <Box sx={{ flexGrow: 1 }} />
 
-          {/* ✅ اكشن في الشاشات الكبيرة */}
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
             <LanguageSwitcher color="white" />
             <IconButton size="large" color="inherit">
-              <Badge badgeContent={4} color="error">
-                <MailIcon />
+              <Badge badgeContent={1} color="error">
+                <ShoppingCartOutlinedIcon />
               </Badge>
             </IconButton>
             <IconButton size="large" color="inherit">
@@ -232,7 +236,6 @@ export default function PrimarySearchAppBar() {
             </IconButton>
           </Box>
 
-          {/* ✅ زرار 3 نقط يظهر بس في الموبايل */}
           <Box sx={{ display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
@@ -248,7 +251,6 @@ export default function PrimarySearchAppBar() {
         </Toolbar>
       </AppBar>
 
-      {/* ✅ Drawer يفتح من اليمين لو لغة عربي */}
       <Drawer
         anchor={i18n.language === "ar" ? "right" : "left"}
         open={drawerOpen}
