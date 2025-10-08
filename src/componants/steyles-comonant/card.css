@@ -1,5 +1,5 @@
 .image-item:hover {
-  transform: scale(1.01); /* تكبر الصورة شوية */
-  opacity: 1; /* توضح شوي */
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25); /* ظل خفيف */
+  transform: scale(1.01);
+  opacity: 1;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
 }

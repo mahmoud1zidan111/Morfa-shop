@@ -3,10 +3,9 @@ import React, { useEffect } from "react";
 import i18n from "./i18n";
 import SimpleContainer from "./componants/contener";
 import PrimarySearchAppBar from "./componants/Navbar";
-
-import Profile from "./Profile"; // عدّل المسار حسب مكان الملف
-import Account from "./Account"; // عدّل المسار حسب مكان الملف
-
+import HeroBackground from "./componants/upSiction"; // (أو HeroBackground حسب الاسم عندك)
+import Profile from "./Profile";
+import Account from "./Account";
 import { Routes, Route, useParams } from "react-router-dom";
 import ActionAreaCard from "./componants/cards";
 
@@ -33,15 +32,24 @@ export default function App() {
       <PrimarySearchAppBar />
 
       <Routes>
-        <Route path="/" element={<SimpleContainer />} />
+        {/* ✅ الصفحة الرئيسية فقط */}
+        <Route
+          path="/"
+          element={
+            <>
+              <HeroBackground /> {/* الخلفية المتغيرة تظهر هنا فقط */}
+              <SimpleContainer /> {/* المحتوى الرئيسي */}
+            </>
+          }
+        />
+
+        {/* باقي الصفحات بدون الخلفية */}
         <Route path="/categories" element={<ActionAreaCard />} />
         <Route path="/products/:category/:id" element={<ProductPage />} />
-
-        {/* المهم: دول اللي كانوا ناقصين */}
         <Route path="/profile" element={<Profile />} />
         <Route path="/account" element={<Account />} />
 
-        {/* اختياري: صفحة لأي مسار غلط */}
+        {/* صفحة افتراضية عند الخطأ */}
         <Route
           path="*"
           element={<div style={{ padding: 20 }}>صفحة غير موجودة</div>}

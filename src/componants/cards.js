@@ -93,7 +93,15 @@ export default function ActionAreaCard() {
       }}
     >
       {cards.map((card) => (
-        <Card key={card.id} sx={{ width: 300, overflow: "hidden" }}>
+        <Card
+          key={card.id}
+          sx={{
+            width: 300,
+            overflow: "hidden",
+            marginTop: "-330px",
+            zIndex: "10",
+          }}
+        >
           <CardContent>
             <Typography gutterBottom variant="h6" align="center">
               {card.title}

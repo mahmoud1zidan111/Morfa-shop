@@ -19,7 +19,7 @@ i18n.use(initReactI18next).init({
     escapeValue: false,
   },
   react: {
-    useSuspense: false, // ✅ هنا تضيفها
+    useSuspense: false,
   },
 });
 
