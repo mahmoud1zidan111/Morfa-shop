@@ -85,8 +85,10 @@ export default function ActionAreaCard() {
   return (
     <Box
       sx={{
+        width: { xs: "100%", sm: "100%", md: "100%", lg: "100%" },
+        // height: { xs: "100%", sm: 300, md: 300 },
         display: "flex",
-        flexWrap: "nowrap",
+        flexWrap: { xs: "wrap", sm: "wrap", md: "", lg: "noWrap" },
         gap: 2,
         p: 5.5,
         justifyContent: "center",
@@ -98,8 +100,9 @@ export default function ActionAreaCard() {
           sx={{
             width: 300,
             overflow: "hidden",
-            marginTop: "-330px",
             zIndex: "10",
+            position: "relative",
+            bottom: { xs: 130, sm: 120, md: 280, lg: 380 },
           }}
         >
           <CardContent>

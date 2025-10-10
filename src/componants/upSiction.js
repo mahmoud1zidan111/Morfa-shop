@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import Box from "@mui/material/Box";
 
@@ -12,6 +12,8 @@ import Kitchen_supplies_en from "../image/top-secction/en/Kitchen_supplies.jpg";
 import Childrens_games_en from "../image/top-secction/en/Childrens_games.jpg";
 import shoes_en from "../image/top-secction/en/shoes.jpg";
 import redy_en from "../image/top-secction/en/redy.jpg";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 
 import Kitchen_supplies_zh from "../image/top-secction/zh/Kitchen_supplies.jpg";
 import Childrens_games_zh from "../image/top-secction/zh/Childrens_games.jpg";
@@ -30,13 +32,14 @@ export default function HeroBackground() {
 
   const images = imagesByLang[lang] || imagesByLang.en;
   const [index, setIndex] = useState(0);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setIndex((prev) => (prev + 1) % images.length);
-    }, 4000);
-    return () => clearInterval(timer);
-  }, [images]);
+  function ClickRight() {
+    if (index < 3) setIndex(index + 1);
+    else setIndex(0);
+  }
+  function ClickLeft() {
+    if (index === 0) setIndex(images.length - 1);
+    else setIndex(index - 1);
+  }
 
   return (
     <Box
@@ -49,7 +52,7 @@ export default function HeroBackground() {
         backgroundImage: `url(${images[index]})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
-        transition: "background-image 1.2s ease-in-out",
+        transition: "background-image 0.9s ease-in-out",
         borderBottom: "2px solid #fff",
         overflow: "hidden",
       }}
@@ -61,12 +64,51 @@ export default function HeroBackground() {
           top: { xs: "55%", sm: "50%" },
           left: "50%",
           transform: "translate(-50%, -50%)",
-          textAlign: "center",
           color: "#000",
           px: { xs: 1, sm: 2 },
-          zIndex: 0,
         }}
       ></Box>
+
+      {/* start Right button to move */}
+
+      <ArrowForwardIosIcon
+        onClick={ClickRight}
+        sx={{
+          position: "absolute",
+          right: "0px",
+          top: "40px",
+          zIndex: 44,
+          fontSize: { xs: 60, sm: 80, md: 100, lg: 130 },
+          color: "white",
+          opacity: 0.4,
+          cursor: "pointer",
+          transition: "0.3s",
+          "&:hover": {
+            opacity: 0.9,
+          },
+        }}
+      />
+      {/*========= start Right button to move  ========*/}
+
+      {/* Start left button to move */}
+      <ArrowBackIosIcon
+        onClick={ClickLeft}
+        sx={{
+          position: "absolute",
+          left: "15px",
+          top: "40px",
+          zIndex: 44,
+          fontSize: { xs: 60, sm: 80, md: 100, lg: 130 },
+          color: "white",
+          opacity: 0.4,
+          cursor: "pointer",
+          transition: "0.3s",
+          "&:hover": {
+            opacity: 0.9,
+          },
+        }}
+      />
+      {/*========= start left button to move  ========*/}
 
       {/* Gradient */}
       <Box
