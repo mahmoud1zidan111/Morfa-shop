@@ -86,7 +86,6 @@ export default function ActionAreaCard() {
     <Box
       sx={{
         width: { xs: "100%", sm: "100%", md: "100%", lg: "100%" },
-        // height: { xs: "100%", sm: 300, md: 300 },
         display: "flex",
         flexWrap: { xs: "wrap", sm: "wrap", md: "", lg: "noWrap" },
         gap: 2,

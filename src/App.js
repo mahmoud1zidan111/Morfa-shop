@@ -8,6 +8,7 @@ import Profile from "./Profile";
 import Account from "./Account";
 import { Routes, Route, useParams } from "react-router-dom";
 import ActionAreaCard from "./componants/cards";
+import Check from "./check";
 
 function ProductPage() {
   const { category, id } = useParams();
@@ -32,7 +33,6 @@ export default function App() {
       <PrimarySearchAppBar />
 
       <Routes>
-        {/* ✅ الصفحة الرئيسية فقط */}
         <Route
           path="/"
           element={
@@ -48,6 +48,7 @@ export default function App() {
         <Route path="/products/:category/:id" element={<ProductPage />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/account" element={<Account />} />
+        <Route path="/check" element={<Check />} />
 
         {/* صفحة افتراضية عند الخطأ */}
         <Route
