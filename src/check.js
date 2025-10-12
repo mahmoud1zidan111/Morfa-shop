@@ -10,6 +10,7 @@ export default function Check() {
           PageNumber: 0,
           CountOfItems: 4,
         });
+        console.log(Response);
         console.log("Product data:", data);
       } catch (error) {
         console.error("Error fetching product:", error);
