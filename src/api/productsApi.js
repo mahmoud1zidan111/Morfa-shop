@@ -15,8 +15,11 @@ export async function getProductsByCategoryAndPaging({
 }
 
 // GetProductsById → Fetch a specific product by ID (with paging and category)
-export async function getProductById({ CategoryId, PageNumber, CountOfItems }) {
-  const response = await axiosInstance.get(`/Products/1`, {
+export async function getProductById(
+  productId,
+  { CategoryId, PageNumber, CountOfItems }
+) {
+  const response = await axiosInstance.get(`/Products/${productId}`, {
     CategoryId,
     PageNumber,
     CountOfItems,
