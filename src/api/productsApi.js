@@ -1,29 +1,13 @@
 import axiosInstance from "./axiosInstance";
 
-// GetProductsByCategoryAndPaging → Fetch products by category with pagination
-export async function getProductsByCategoryAndPaging({
-  CategoryId,
-  PageNumber,
-  CountOfItems,
-}) {
-  const response = await axiosInstance.get("/Products/user/2", {
-    CategoryId,
-    PageNumber,
-    CountOfItems,
-  });
-  return response.data;
-}
-
-// GetProductsById → Fetch a specific product by ID (with paging and category)
 export async function getProductById(
   productId,
-  { CategoryId, PageNumber, CountOfItems }
+  { CategoryId, PageNumber, CountOfItems } = {}
 ) {
-  const response = await axiosInstance.get(`/Products/${productId}`, {
-    CategoryId,
-    PageNumber,
-    CountOfItems,
+  const res = await axiosInstance.get(`/Products/${productId}`, {
+    params: { CategoryId, PageNumber, CountOfItems },
+    // headers: { "x-skip-auth": true }, // تقدر تستخدمها لو عايز تضمن عدم إضافة التوكن
   });
-  return response.data;
+  console.log("getProductById ->", res.data);
+  return res.data;
 }
-// export const getProducts = getProductsByCategoryAndPaging;

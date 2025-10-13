@@ -1,23 +1,38 @@
+// src/api/axiosInstance.js
 import axios from "axios";
 import { API_URL } from "./config";
 
-//  Create a reusable axios instance
-// إنشاء نسخة جاهزة من axios يمكن استخدامها في كل الطلبات
+const isDev = process.env.NODE_ENV === "development";
+
 const axiosInstance = axios.create({
-  baseURL: API_URL,
+  baseURL: isDev ? "" : API_URL, // في الديف: نفس الأصل (localhost) عشان CRA ي proxy
 });
 
-//  Add token automatically if user is logged in
-// إضافة التوكن تلقائيًا إذا كان المستخدم مسجل دخول
 axiosInstance.interceptors.request.use((config) => {
+  config.headers = config.headers || {};
+  const method = (config.method || "get").toLowerCase();
+
+  // ما نضيفش Content-Type على GET عشان نتفادى preflight
+  if (method !== "get" && !config.headers["Content-Type"]) {
+    config.headers["Content-Type"] = "application/json";
+  }
+
+  // Products عامة: امنع Authorization
+  if (
+    typeof config.url === "string" &&
+    /^\/?Products(\/|$)/i.test(config.url)
+  ) {
+    delete config.headers.Authorization;
+    return config;
+  }
+
+  // باقي الطلبات: ضيف التوكن لو موجود
   const token = localStorage.getItem("token");
   if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+    const hasBearer = /^bearer\s/i.test(token);
+    config.headers.Authorization = hasBearer ? token : `Bearer ${token}`;
   }
   return config;
 });
 
 export default axiosInstance;
-
-// Interceptors allow us to attach headers before every request
-// الـ interceptors تسمح لنا بإضافة التوكن أو أي إعداد قبل إرسال أي طلب

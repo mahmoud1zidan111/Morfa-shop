@@ -21,7 +21,7 @@ import shoes_zh from "../image/top-secction/zh/shoes.jpg";
 import redy_zh from "../image/top-secction/zh/redy.jpg";
 
 export default function HeroBackground() {
-  const { t, i18n } = useTranslation();
+  const { i18n } = useTranslation();
   const lang = i18n.language;
 
   const imagesByLang = {
