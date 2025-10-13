@@ -11,7 +11,7 @@ export default function Check() {
     if (ran.current) return;
     ran.current = true;
 
-    const ids = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; // حط IDs اللي عايزها
+    const ids = [1, 2, 3, 4, 5, 6]; // حط IDs اللي عايزها
 
     (async () => {
       try {
@@ -42,7 +42,7 @@ export default function Check() {
   }, []);
 
   return (
-    <div style={{ marginTop: 30, padding: 20 }}>
+    <div style={{ marginTop: 100, padding: 20 }}>
       <h3>Check console</h3>
       <pre dir="ltr">
         {items.length
