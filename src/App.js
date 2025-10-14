@@ -9,6 +9,7 @@ import Account from "./Account";
 import { Routes, Route, useParams } from "react-router-dom";
 import ActionAreaCard from "./componants/cards";
 import Check from "./check";
+// import CategoryProducts from "./CategoryProducts";
 
 function ProductPage() {
   const { category, id } = useParams();
@@ -49,6 +50,7 @@ export default function App() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/account" element={<Account />} />
         <Route path="/check" element={<Check />} />
+        {/* <Route path="/categories/:id" element={<CategoryProducts />} /> */}
 
         {/* صفحة افتراضية عند الخطأ */}
         <Route

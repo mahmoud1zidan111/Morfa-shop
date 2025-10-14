@@ -1,27 +1,23 @@
-// src/api/axiosInstance.js
 import axios from "axios";
-import { API_URL } from "./config";
 
 const isDev = process.env.NODE_ENV === "development";
 
 const axiosInstance = axios.create({
-  baseURL: isDev ? "" : API_URL, // في الديف: نفس الأصل (localhost) عشان CRA ي proxy
+  baseURL: isDev ? "" : "/api/proxy",
 });
 
 axiosInstance.interceptors.request.use((config) => {
   config.headers = config.headers || {};
+  const url = String(config.url || "");
   const method = (config.method || "get").toLowerCase();
 
-  // ما نضيفش Content-Type على GET عشان نتفادى preflight
-  if (method !== "get" && !config.headers["Content-Type"]) {
-    config.headers["Content-Type"] = "application/json";
+  // ما تضيفش Content-Type على GET
+  if (method === "get" && config.headers["Content-Type"]) {
+    delete config.headers["Content-Type"];
   }
 
-  // Products عامة: امنع Authorization
-  if (
-    typeof config.url === "string" &&
-    /^\/?Products(\/|$)/i.test(config.url)
-  ) {
+  // المسارات العامة
+  if (/^\/?(Categories|Products)(\/|$)/i.test(url)) {
     delete config.headers.Authorization;
     return config;
   }

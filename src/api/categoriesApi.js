@@ -1,19 +1,30 @@
 import axiosInstance from "./axiosInstance";
+const API_BASE = "https://myecommerceapis.runasp.net";
 
-//  Categories API Functions
-// getAllCategories → Fetch all available categories from the backend
+let catsCache = null;
 
-// Get all categories
-export async function getAllCategories() {
-  const response = await axiosInstance.get("/api/Category/GetAll");
-  return response.data;
+function buildImageUrl(path) {
+  if (!path) return null;
+  const clean = String(path).replace(/\\/g, "/").replace(/^\/+/, "");
+  if (/^https?:\/\//i.test(clean)) return clean;
+  return `${API_BASE}/${clean}`;
 }
 
-// =========   =======   ========  ========
+export async function getAllCategories() {
+  if (catsCache) return catsCache;
+  const res = await axiosInstance.get("/Categories", {
+    headers: { "x-skip-auth": true },
+  });
+  catsCache = Array.isArray(res.data)
+    ? res.data.map((c) => ({
+        id: c.id,
+        name: c.name,
+        imageUrl: buildImageUrl(c.image),
+      }))
+    : [];
+  return catsCache;
+}
 
-// getCategoryById → Fetch details of a specific category by its ID
-// Get category by ID
-export async function getCategoryById(categoryId) {
-  const response = await axiosInstance.get(`/api/Category/Get/${categoryId}`);
-  return response.data;
+export function clearCategoriesCache() {
+  catsCache = null;
 }
