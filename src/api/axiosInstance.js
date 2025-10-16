@@ -1,9 +1,10 @@
+// src/api/axiosInstance.js
 import axios from "axios";
-
-const isDev = process.env.NODE_ENV === "development";
+import { API_URL } from "./config"; // https://myecommerceapis.runasp.net
 
 const axiosInstance = axios.create({
-  baseURL: isDev ? "" : "/api/proxy",
+  baseURL: API_URL, // بدل "/api/proxy" في الإنتاج
+  timeout: 15000,
 });
 
 axiosInstance.interceptors.request.use((config) => {
@@ -16,17 +17,19 @@ axiosInstance.interceptors.request.use((config) => {
     delete config.headers["Content-Type"];
   }
 
-  // المسارات العامة
+  // المسارات العامة (مش محتاجة توكن)
   if (/^\/?(Categories|Products)(\/|$)/i.test(url)) {
     delete config.headers.Authorization;
     return config;
   }
 
-  // باقي الطلبات: ضيف التوكن لو موجود
-  const token = localStorage.getItem("token");
-  if (token) {
-    const hasBearer = /^bearer\s/i.test(token);
-    config.headers.Authorization = hasBearer ? token : `Bearer ${token}`;
+  // ضيف التوكن لو موجود (متصفح فقط)
+  if (typeof window !== "undefined") {
+    const token = localStorage.getItem("token");
+    if (token) {
+      const hasBearer = /^bearer\s/i.test(token);
+      config.headers.Authorization = hasBearer ? token : `Bearer ${token}`;
+    }
   }
   return config;
 });
