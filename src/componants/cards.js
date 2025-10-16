@@ -11,14 +11,13 @@ import {
 import { Link as RouterLink } from "react-router-dom";
 import { getAllCategories } from "../api/categoriesApi";
 
-// تقسيم آراي إلى مجموعات من 4
 function chunk(arr, size = 1) {
   const out = [];
   for (let i = 0; i < arr.length; i += size) out.push(arr.slice(i, i + size));
+  // console.log("tiht is console Out is :" + arr);
   return out;
 }
 
-// صورة بديلة
 function placeholder(name) {
   return `https://via.placeholder.com/200x200.png?text=${encodeURIComponent(
     name || "Category"
@@ -35,7 +34,8 @@ export default function CategoryBlocks() {
     (async () => {
       try {
         const cats = await getAllCategories(); // [{id,name,imageUrl}]
-        // اقسم التصنيفات إلى بلاطات (كل بلاطة 4 عناصر)
+
+        console.log(cats);
         const grouped = chunk(cats, 1);
         if (alive) setBlocks(grouped);
       } catch (e) {
@@ -55,7 +55,7 @@ export default function CategoryBlocks() {
         px: { xs: 2, md: 6 },
         py: 4,
         position: "relative",
-        bottom: 330,
+        bottom: 310,
         overflow: "hidden",
       }}
     >
@@ -66,7 +66,7 @@ export default function CategoryBlocks() {
       )}
 
       {/* شبكة البلاطات: 4 أعمدة على الشاشات الكبيرة */}
-      <Grid container spacing={4}>
+      <Grid container spacing={7}>
         {loading
           ? Array.from({ length: 8 }).map((_, i) => (
               <Grid item xs={12} sm={6} md={6} lg={4} key={i}>
@@ -124,7 +124,7 @@ export default function CategoryBlocks() {
                               alt={cat.name}
                               loading="lazy"
                               sx={{
-                                width: "100%",
+                                width: "200px",
                                 aspectRatio: "1 / 1",
                                 objectFit: "cover",
                                 borderRadius: 1.5,

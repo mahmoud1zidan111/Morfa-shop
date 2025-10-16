@@ -32,7 +32,6 @@ export default function CategoryProducts() {
   const getId = (p) => p?.id || p?.productId || p?.Id || p?.ProductId;
 
   useEffect(() => {
-    // reset عند تغيير الكاتيجوري
     setItems([]);
     setPage(0);
     setHasMore(true);
