@@ -26,6 +26,8 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 
 import { Link as RouterLink } from "react-router-dom";
+import { GitToken } from "../api/usersApi";
+const isUser = GitToken();
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -128,12 +130,23 @@ export default function PrimarySearchAppBar() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem component={RouterLink} to="/profile" onClick={handleMenuClose}>
-        {t("profile")}
-      </MenuItem>
-      <MenuItem component={RouterLink} to="/account" onClick={handleMenuClose}>
-        {t("my_account")}
-      </MenuItem>
+      {isUser ? (
+        <MenuItem
+          component={RouterLink}
+          to="/profile"
+          onClick={handleMenuClose}
+        >
+          {t("profile")}
+        </MenuItem>
+      ) : (
+        <MenuItem
+          component={RouterLink}
+          to="/account"
+          onClick={handleMenuClose}
+        >
+          {t("creat_account")}
+        </MenuItem>
+      )}
     </Menu>
   );
   //  Mobile Menu
@@ -150,7 +163,7 @@ export default function PrimarySearchAppBar() {
     >
       <MenuItem>
         <IconButton size="large" color="inherit">
-          <Badge badgeContent={4} color="error">
+          <Badge badgeContent={2} color="error">
             <ShoppingCartOutlinedIcon />
           </Badge>
         </IconButton>
@@ -164,12 +177,30 @@ export default function PrimarySearchAppBar() {
         </IconButton>
         <p>{t("notifications")}</p>
       </MenuItem>
-      <MenuItem onClick={handleProfileMenuOpen}>
-        <IconButton size="large" color="inherit">
+      {isUser ? (
+        <IconButton
+          size="large"
+          edge="start"
+          color="inherit"
+          component={RouterLink}
+          to="/profile"
+        >
           <AccountCircle />
+          <Typography sx={{ ml: 1 }}> {t("profile")}</Typography>
         </IconButton>
-        <p>{t("profile")}</p>
-      </MenuItem>
+      ) : (
+        <IconButton
+          size="large"
+          edge="end"
+          color="inherit"
+          component={RouterLink}
+          to="/signup"
+        >
+          <AccountCircle />
+          <Typography sx={{ ml: 1 }}> {t("creat_account")}</Typography>
+        </IconButton>
+      )}
+
       <MenuItem>
         <LanguageSwitcher color="black" />
       </MenuItem>

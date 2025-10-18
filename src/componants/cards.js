@@ -10,7 +10,9 @@ import {
 } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 import { getAllCategories } from "../api/categoriesApi";
-import RevealFromCenter from "./RevealFromCenter"; // ← المسار حسب مكان الملف
+import RevealFromCenter from "./RevealFromCenter";
+
+const VISUAL_LIFT = 310; // نفس القيمة اللي كنت مستخدمها في bottom
 
 function chunk(arr, size = 1) {
   const out = [];
@@ -25,20 +27,20 @@ function placeholder(name) {
 }
 
 export default function CategoryBlocks() {
-  const [blocks, setBlocks] = useState([]); // كل block = عنصر واحد (كارت منفصل)
+  const [blocks, setBlocks] = useState([]); // كل block = عنصر واحد
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState(null);
 
-  const [visibleCount, setVisibleCount] = useState(4); // نبدأ بـ 4 كروت
+  const [visibleCount, setVisibleCount] = useState(4);
   const sentinelRef = useRef(null);
-  const loadingMoreRef = useRef(false); // حراسة ضد التكرار السريع
+  const loadingMoreRef = useRef(false);
 
   useEffect(() => {
     let alive = true;
     (async () => {
       try {
-        const cats = await getAllCategories(); // [{id,name,imageUrl}]
-        const grouped = chunk(cats, 1); // كروت منفصلة
+        const cats = await getAllCategories();
+        const grouped = chunk(cats, 1);
         if (alive) {
           setBlocks(grouped);
           setVisibleCount(Math.min(4, grouped.length));
@@ -52,7 +54,7 @@ export default function CategoryBlocks() {
     return () => (alive = false);
   }, []);
 
-  // زيادة 4 كروت لما السنتينل يوصل لنص الصفحة
+  // حمّل 4 كروت إضافية لما نقرّب من أسفل الصفحة
   useEffect(() => {
     if (loading) return;
     const el = sentinelRef.current;
@@ -63,16 +65,13 @@ export default function CategoryBlocks() {
         if (entry.isIntersecting && !loadingMoreRef.current) {
           loadingMoreRef.current = true;
           setVisibleCount((prev) => Math.min(prev + 4, blocks.length));
-          // مهلة صغيرة قبل السماح بزيادة تانية
-          setTimeout(() => {
-            loadingMoreRef.current = false;
-          }, 250);
+          setTimeout(() => (loadingMoreRef.current = false), 250);
         }
       },
       {
         root: null,
-        rootMargin: "-45% 0px -45% 0px", // نفس منطق النص
-        threshold: 0.01,
+        rootMargin: "0px 0px 10% 0px", // فعّل التحميل قبل ما نوصل للآخر
+        threshold: 0,
       }
     );
 
@@ -82,123 +81,126 @@ export default function CategoryBlocks() {
 
   const itemsToRender = blocks.slice(0, visibleCount);
 
-  // مزامنة WOW لو لسه شغّال معاك على عناصر تانية
-  useEffect(() => {
-    window.__wow?.sync?.();
-  }, [visibleCount]);
-
   return (
+    // مفيش position ولا bottom هنا
     <Box
       sx={{
-        zIndex: 2,
+        zIndex: 1,
         width: "100%",
         px: { xs: 2, md: 6 },
         py: 4,
-        position: "relative",
-        bottom: 310,
-        overflow: "hidden",
+        // mt: VISUAL_LIFT, // نحافظ على مساحة في التدفق
+        overflow: "visible", // عشان الأنيميشن ما تتقصّش
       }}
     >
-      {err && (
-        <Box color="error.main" sx={{ textAlign: "center", mb: 1 }}>
-          حصل خطأ أثناء تحميل التصنيفات: {String(err)}
-        </Box>
-      )}
+      {/* نرفع المحتوى بصريًا فقط */}
+      <Box sx={{ transform: `translateY(-${VISUAL_LIFT}px)` }}>
+        {err && (
+          <Box color="error.main" sx={{ textAlign: "center", mb: 1 }}>
+            حصل خطأ أثناء تحميل التصنيفات: {String(err)}
+          </Box>
+        )}
 
-      <Grid container spacing={7}>
-        {loading
-          ? Array.from({ length: 4 }).map((_, i) => (
-              <Grid item xs={12} sm={6} md={6} lg={4} key={i}>
-                <Card sx={{ borderRadius: 2, border: "1px solid #e9ecef" }}>
-                  <CardContent>
-                    <Skeleton
-                      variant="text"
-                      width="60%"
-                      height={28}
-                      sx={{ mb: 2 }}
-                    />
-                    <Skeleton variant="rectangular" height={160} />
-                  </CardContent>
-                </Card>
-              </Grid>
-            ))
-          : itemsToRender.map((group, idx) => (
-              <Grid item xs={12} sm={6} md={6} lg={4} key={idx}>
-                <RevealFromCenter
-                  animation="animate__fadeInUp"
-                  duration="0.6s"
-                  delay={(idx % 4) * 0.08} // ستاجر داخل كل دفعة 4
-                >
-                  <Card
-                    sx={
-                      {
-                        // borderRadius: 2,
-                        // border: "1px solid #e9ecef",
-                        // background: "#fff",
-                      }
-                    }
-                  >
+        <Grid container spacing={7}>
+          {loading
+            ? Array.from({ length: 4 }).map((_, i) => (
+                <Grid item xs={12} sm={6} md={6} lg={4} key={i}>
+                  <Card sx={{ borderRadius: 2, border: "1px solid #e9ecef" }}>
                     <CardContent>
-                      <Typography variant="h6" sx={{ fontWeight: 700, mb: 2 }}>
-                        مختارات من التصنيفات
-                      </Typography>
-
-                      <Grid container spacing={2}>
-                        {group.map((cat) => (
-                          <Grid item xs={12} key={cat.id}>
-                            <Box
-                              component={RouterLink}
-                              to={`/categories/${cat.id}`}
-                              sx={{
-                                textDecoration: "none",
-                                color: "inherit",
-                                display: "block",
-                              }}
-                            >
-                              <Box
-                                component="img"
-                                src={cat.imageUrl || placeholder(cat.name)}
-                                alt={cat.name}
-                                loading="lazy"
-                                style={{
-                                  width: "200px",
-                                  aspectRatio: "1 / 1",
-                                  objectFit: "cover",
-                                  borderRadius: 12,
-                                  border: "1px solid #eee",
-                                }}
-                              />
-                              <Typography
-                                variant="body2"
-                                align="center"
-                                sx={{ mt: 1 }}
-                              >
-                                {cat.name}
-                              </Typography>
-                            </Box>
-                          </Grid>
-                        ))}
-                      </Grid>
-
-                      <Box sx={{ mt: 2, textAlign: "start" }}>
-                        <MuiLink
-                          component={RouterLink}
-                          to="/categories"
-                          sx={{ fontWeight: 600 }}
-                        >
-                          شاهد المزيد
-                        </MuiLink>
-                      </Box>
+                      <Skeleton
+                        variant="text"
+                        width="60%"
+                        height={28}
+                        sx={{ mb: 2 }}
+                      />
+                      <Skeleton variant="rectangular" height={160} />
                     </CardContent>
                   </Card>
-                </RevealFromCenter>
-              </Grid>
-            ))}
-      </Grid>
+                </Grid>
+              ))
+            : itemsToRender.map((group, idx) => (
+                <Grid item xs={12} sm={6} md={6} lg={4} key={idx}>
+                  <RevealFromCenter
+                    animation="animate__fadeInUp"
+                    duration="0.6s"
+                    delay={(idx % 4) * 0.08}
+                    // center ثابت 45% داخل RevealFromCenter
+                  >
+                    <Card
+                      sx={
+                        {
+                          // ارجع ستايلك لو عايز
+                          // borderRadius: 2,
+                          // border: "1px solid #e9ecef",
+                          // background: "#fff",
+                        }
+                      }
+                    >
+                      <CardContent>
+                        <Typography
+                          variant="h6"
+                          sx={{ fontWeight: 700, mb: 2 }}
+                        >
+                          مختارات من التصنيفات
+                        </Typography>
 
-      {/* السنتينل: يظهر 4 كروت إضافية لما يوصل لنص الشاشة */}
+                        <Grid container spacing={2}>
+                          {group.map((cat) => (
+                            <Grid item xs={12} key={cat.id}>
+                              <Box
+                                component={RouterLink}
+                                to={`/categories/${cat.id}`}
+                                sx={{
+                                  textDecoration: "none",
+                                  color: "inherit",
+                                  display: "block",
+                                }}
+                              >
+                                <Box
+                                  component="img"
+                                  src={cat.imageUrl || placeholder(cat.name)}
+                                  alt={cat.name}
+                                  loading="lazy"
+                                  style={{
+                                    width: "200px",
+                                    aspectRatio: "1 / 1",
+                                    objectFit: "cover",
+                                    borderRadius: 12,
+                                    border: "1px solid #eee",
+                                  }}
+                                />
+                                <Typography
+                                  variant="body2"
+                                  align="center"
+                                  sx={{ mt: 1 }}
+                                >
+                                  {cat.name}
+                                </Typography>
+                              </Box>
+                            </Grid>
+                          ))}
+                        </Grid>
+
+                        <Box sx={{ mt: 2, textAlign: "start" }}>
+                          <MuiLink
+                            component={RouterLink}
+                            to="/categories"
+                            sx={{ fontWeight: 600 }}
+                          >
+                            شاهد المزيد
+                          </MuiLink>
+                        </Box>
+                      </CardContent>
+                    </Card>
+                  </RevealFromCenter>
+                </Grid>
+              ))}
+        </Grid>
+      </Box>
+
+      {/* السنتينل خارج الصندوق المتحوّل — علشان التحميل يشتغل صح */}
       {!loading && visibleCount < blocks.length && (
-        <div ref={sentinelRef} style={{ height: 0.5, marginTop: 300 }} />
+        <div ref={sentinelRef} style={{ height: 2 }} />
       )}
     </Box>
   );

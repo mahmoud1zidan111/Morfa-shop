@@ -34,7 +34,7 @@ export default function RevealFromCenter({
       {
         // نضيّق الـ viewport بحيث اللي يتشاف هو منتصف الشاشة تقريبًا
         root: null,
-        rootMargin: "-45% 0px -45% 0px", // منطقة الرؤية = 10% الوسط
+        rootMargin: "0% 0px 0% 0px", // منطقة الرؤية = 10% الوسط
         threshold: 0.01,
       }
     );

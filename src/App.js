@@ -9,24 +9,13 @@ import PrimarySearchAppBar from "./componants/Navbar";
 import HeroBackground from "./componants/upSiction"; // (أو HeroBackground حسب الاسم عندك)
 import Profile from "./Profile";
 import Account from "./Account";
-import { Routes, Route, useParams } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import { useLocation } from "react-router-dom"; // ← هنستخدمها عشان نعمل sync بعد تغيّر الروت
 import ActionAreaCard from "./componants/cards";
 import Check from "./check";
-// import CategoryProducts from "./CategoryProducts";
-
-function ProductPage() {
-  const { category, id } = useParams();
-  return (
-    <div style={{ padding: 20 }}>
-      <h2>صفحة المنتج</h2>
-      <p>الفئة: {category}</p>
-      <p>المنتج رقم: {id}</p>
-    </div>
-  );
-}
-
+import { GitToken } from "./api/usersApi";
 export default function App() {
+  GitToken();
   const wowRef = useRef(null); // ← مرجع للـ WOW instance
   const location = useLocation(); // ← لمزامنة WOW عند تغيير الصفحة
 
@@ -92,18 +81,6 @@ export default function App() {
               data-wow-duration="0.6s"
             >
               <ActionAreaCard />
-            </div>
-          }
-        />
-
-        <Route
-          path="/products/:category/:id"
-          element={
-            <div
-              className="wow animate__animated animate__fadeInUp"
-              data-wow-duration="0.6s"
-            >
-              <ProductPage />
             </div>
           }
         />
