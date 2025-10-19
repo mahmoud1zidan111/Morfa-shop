@@ -14,6 +14,8 @@ import { useLocation } from "react-router-dom"; // ← هنستخدمها عشا
 import ActionAreaCard from "./componants/cards";
 import Check from "./check";
 import { GitToken } from "./api/usersApi";
+import SignUpForm from "./CreatAccont";
+
 export default function App() {
   GitToken();
   const wowRef = useRef(null); // ← مرجع للـ WOW instance
@@ -108,6 +110,14 @@ export default function App() {
           element={
             <div className="wow animate__animated animate__fadeInUp">
               <Check />
+            </div>
+          }
+        />
+        <Route
+          path="/CreatAccont"
+          element={
+            <div className="wow animate__animated animate__fadeInUp">
+              <SignUpForm />
             </div>
           }
         />

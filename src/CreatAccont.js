@@ -1,13 +1,13 @@
 import React from "react";
-import { Box, TextField, Button, Typography, Paper } from "@mui/material";
+import { Box, TextField, Button, Typography, Paper, Grid } from "@mui/material";
 import { motion } from "framer-motion";
 
-export default function Account() {
+export default function SignUpForm() {
   return (
     <Box
       sx={{
         minHeight: "100vh",
-        background: "linear-gradient(135deg, #eaeaeaff, #ffffffff)",
+        background: "linear-gradient(135deg, #1e1e2f, #27293d)",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -22,7 +22,7 @@ export default function Account() {
         <Paper
           elevation={6}
           sx={{
-            width: 360,
+            width: 400,
             p: 4,
             borderRadius: 3,
             background: "rgba(255,255,255,0.08)",
@@ -34,10 +34,45 @@ export default function Account() {
             variant="h5"
             align="center"
             gutterBottom
-            sx={{ color: "#000000ff", mb: 3, fontWeight: "bold" }}
+            sx={{ color: "#fff", mb: 3, fontWeight: "bold" }}
           >
-            تسجيل الدخول
+            إنشاء حساب جديد
           </Typography>
+
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                label="الاسم الأول"
+                variant="outlined"
+                fullWidth
+                InputLabelProps={{ style: { color: "#ccc" } }}
+                InputProps={{ style: { color: "#fff" } }}
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    "& fieldset": { borderColor: "#666" },
+                    "&:hover fieldset": { borderColor: "#90caf9" },
+                    "&.Mui-focused fieldset": { borderColor: "#42a5f5" },
+                  },
+                }}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                label="اسم العائلة"
+                variant="outlined"
+                fullWidth
+                InputLabelProps={{ style: { color: "#ccc" } }}
+                InputProps={{ style: { color: "#fff" } }}
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    "& fieldset": { borderColor: "#666" },
+                    "&:hover fieldset": { borderColor: "#90caf9" },
+                    "&.Mui-focused fieldset": { borderColor: "#42a5f5" },
+                  },
+                }}
+              />
+            </Grid>
+          </Grid>
 
           <TextField
             label="البريد الإلكتروني"
@@ -45,12 +80,7 @@ export default function Account() {
             fullWidth
             margin="normal"
             InputLabelProps={{ style: { color: "#ccc" } }}
-            InputProps={{
-              style: {
-                color: "#000000ff",
-                borderColor: "#666",
-              },
-            }}
+            InputProps={{ style: { color: "#fff" } }}
             sx={{
               "& .MuiOutlinedInput-root": {
                 "& fieldset": { borderColor: "#666" },
@@ -67,11 +97,24 @@ export default function Account() {
             fullWidth
             margin="normal"
             InputLabelProps={{ style: { color: "#ccc" } }}
-            InputProps={{
-              style: {
-                color: "#000000ff",
+            InputProps={{ style: { color: "#fff" } }}
+            sx={{
+              "& .MuiOutlinedInput-root": {
+                "& fieldset": { borderColor: "#666" },
+                "&:hover fieldset": { borderColor: "#90caf9" },
+                "&.Mui-focused fieldset": { borderColor: "#42a5f5" },
               },
             }}
+          />
+
+          <TextField
+            label="تأكيد كلمة المرور"
+            type="password"
+            variant="outlined"
+            fullWidth
+            margin="normal"
+            InputLabelProps={{ style: { color: "#ccc" } }}
+            InputProps={{ style: { color: "#fff" } }}
             sx={{
               "& .MuiOutlinedInput-root": {
                 "& fieldset": { borderColor: "#666" },
@@ -95,20 +138,16 @@ export default function Account() {
               },
             }}
           >
-            تسجيل الدخول
+            إنشاء الحساب
           </Button>
 
           <Typography
             align="center"
             sx={{ color: "#bbb", fontSize: 14, mt: 2 }}
           >
-            ليس لديك حساب؟ {/* tist is link go to the cerat accont  */}
-            <a
-              href="./CreatAccont.js"
-              style={{ color: "#90caf9", textDecoration: "none" }}
-            >
-              {/* ========= ceraet acont ========= */}
-              إنشاء حساب جديد
+            لديك حساب بالفعل؟{" "}
+            <a href="#" style={{ color: "#90caf9", textDecoration: "none" }}>
+              تسجيل الدخول
             </a>
           </Typography>
         </Paper>
