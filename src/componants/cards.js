@@ -65,7 +65,7 @@ export default function CategoryBlocks() {
         if (entry.isIntersecting && !loadingMoreRef.current) {
           loadingMoreRef.current = true;
           setVisibleCount((prev) => Math.min(prev + 4, blocks.length));
-          setTimeout(() => (loadingMoreRef.current = false), 250);
+          setTimeout(() => (loadingMoreRef.current = false), 100);
         }
       },
       {
@@ -82,13 +82,13 @@ export default function CategoryBlocks() {
   const itemsToRender = blocks.slice(0, visibleCount);
 
   return (
-    // مفيش position ولا bottom هنا
     <Box
+      className="container-card"
       sx={{
-        zIndex: 1,
-        width: "100%",
-        px: { xs: 2, md: 6 },
-        py: 4,
+        zIndex: 2,
+        display: "flex",
+        flexDirection: "row",
+        py: { xs: 24, sm: 21, md: 10, lg: 2 },
         // mt: VISUAL_LIFT, // نحافظ على مساحة في التدفق
         overflow: "visible", // عشان الأنيميشن ما تتقصّش
       }}
@@ -101,10 +101,14 @@ export default function CategoryBlocks() {
           </Box>
         )}
 
-        <Grid container spacing={7}>
+        <Grid
+          container
+          spacing={{ xs: 2, sm: 4, md: 6 }}
+          justifyContent="center"
+        >
           {loading
             ? Array.from({ length: 4 }).map((_, i) => (
-                <Grid item xs={12} sm={6} md={6} lg={4} key={i}>
+                <Grid item xs={6} sm={6} md={6} lg={4} key={i}>
                   <Card sx={{ borderRadius: 2, border: "1px solid #e9ecef" }}>
                     <CardContent>
                       <Skeleton
@@ -119,23 +123,13 @@ export default function CategoryBlocks() {
                 </Grid>
               ))
             : itemsToRender.map((group, idx) => (
-                <Grid item xs={12} sm={6} md={6} lg={4} key={idx}>
+                <Grid item xs={6} sm={6} md={6} lg={4} key={idx}>
                   <RevealFromCenter
                     animation="animate__fadeInUp"
                     duration="0.6s"
                     delay={(idx % 4) * 0.08}
-                    // center ثابت 45% داخل RevealFromCenter
                   >
-                    <Card
-                      sx={
-                        {
-                          // ارجع ستايلك لو عايز
-                          // borderRadius: 2,
-                          // border: "1px solid #e9ecef",
-                          // background: "#fff",
-                        }
-                      }
-                    >
+                    <Card>
                       <CardContent>
                         <Typography
                           variant="h6"
@@ -162,6 +156,7 @@ export default function CategoryBlocks() {
                                   alt={cat.name}
                                   loading="lazy"
                                   style={{
+                                    zIndex: 1,
                                     width: "200px",
                                     aspectRatio: "1 / 1",
                                     objectFit: "cover",

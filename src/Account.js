@@ -104,7 +104,7 @@ export default function Account() {
           >
             ليس لديك حساب؟ {/* tist is link go to the cerat accont  */}
             <a
-              href="./CreatAccont.js"
+              href="./CreatAccont"
               style={{ color: "#90caf9", textDecoration: "none" }}
             >
               {/* ========= ceraet acont ========= */}

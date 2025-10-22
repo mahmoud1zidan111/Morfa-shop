@@ -3,3 +3,9 @@
   opacity: 1;
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
 }
+@media screen and (min-width: 450px) {
+  .container-card {
+    width: 100%;
+    margin: 0 auto;
+  }
+}

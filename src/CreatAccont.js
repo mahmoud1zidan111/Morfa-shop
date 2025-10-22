@@ -1,16 +1,64 @@
-import React from "react";
+import React, { useState } from "react";
 import { Box, TextField, Button, Typography, Paper, Grid } from "@mui/material";
 import { motion } from "framer-motion";
 
 export default function SignUpForm() {
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+
+  const [errors, setErrors] = useState({
+    confirmPassword: "",
+  });
+
+  // ✅ دالة التغيير والتحقق من التطابق
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+
+    if (name === "confirmPassword") {
+      setErrors((prev) => ({
+        ...prev,
+        confirmPassword:
+          value === formData.password
+            ? ""
+            : "كلمة المرور وتأكيدها غير متطابقين.",
+      }));
+    }
+
+    if (name === "password") {
+      setErrors((prev) => ({
+        ...prev,
+        confirmPassword:
+          formData.confirmPassword === value ? "" : prev.confirmPassword,
+      }));
+    }
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (formData.password !== formData.confirmPassword) {
+      setErrors({ confirmPassword: "كلمة المرور وتأكيدها غير متطابقين." });
+      return;
+    }
+
+    console.log("✅ تم إرسال البيانات:", formData);
+  };
+
   return (
     <Box
       sx={{
-        minHeight: "100vh",
-        background: "linear-gradient(135deg, #1e1e2f, #27293d)",
+        minHeight: "90vh",
+        background: "linear-gradient(135deg, #eaeaeaff, #ffffffff)",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
+        marginTop: "70px",
         p: 2,
       }}
     >
@@ -34,119 +82,142 @@ export default function SignUpForm() {
             variant="h5"
             align="center"
             gutterBottom
-            sx={{ color: "#fff", mb: 3, fontWeight: "bold" }}
+            sx={{ color: "#000000ff", mb: 3, fontWeight: "bold" }}
           >
             إنشاء حساب جديد
           </Typography>
 
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                label="الاسم الأول"
-                variant="outlined"
-                fullWidth
-                InputLabelProps={{ style: { color: "#ccc" } }}
-                InputProps={{ style: { color: "#fff" } }}
-                sx={{
-                  "& .MuiOutlinedInput-root": {
-                    "& fieldset": { borderColor: "#666" },
-                    "&:hover fieldset": { borderColor: "#90caf9" },
-                    "&.Mui-focused fieldset": { borderColor: "#42a5f5" },
-                  },
-                }}
-              />
+          <form onSubmit={handleSubmit}>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  label="الاسم الأول"
+                  name="firstName"
+                  value={formData.firstName}
+                  onChange={handleChange}
+                  variant="outlined"
+                  fullWidth
+                  InputLabelProps={{ style: { color: "#ccc" } }}
+                  InputProps={{ style: { color: "#000000ff" } }}
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      "& fieldset": { borderColor: "#666" },
+                      "&:hover fieldset": { borderColor: "#90caf9" },
+                      "&.Mui-focused fieldset": { borderColor: "#42a5f5" },
+                    },
+                  }}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  label="اسم العائلة"
+                  name="lastName"
+                  value={formData.lastName}
+                  onChange={handleChange}
+                  variant="outlined"
+                  fullWidth
+                  InputLabelProps={{ style: { color: "#ccc" } }}
+                  InputProps={{ style: { color: "#000000ff" } }}
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      "& fieldset": { borderColor: "#666" },
+                      "&:hover fieldset": { borderColor: "#90caf9" },
+                      "&.Mui-focused fieldset": { borderColor: "#42a5f5" },
+                    },
+                  }}
+                />
+              </Grid>
             </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                label="اسم العائلة"
-                variant="outlined"
-                fullWidth
-                InputLabelProps={{ style: { color: "#ccc" } }}
-                InputProps={{ style: { color: "#fff" } }}
-                sx={{
-                  "& .MuiOutlinedInput-root": {
-                    "& fieldset": { borderColor: "#666" },
-                    "&:hover fieldset": { borderColor: "#90caf9" },
-                    "&.Mui-focused fieldset": { borderColor: "#42a5f5" },
-                  },
-                }}
-              />
-            </Grid>
-          </Grid>
 
-          <TextField
-            label="البريد الإلكتروني"
-            variant="outlined"
-            fullWidth
-            margin="normal"
-            InputLabelProps={{ style: { color: "#ccc" } }}
-            InputProps={{ style: { color: "#fff" } }}
-            sx={{
-              "& .MuiOutlinedInput-root": {
-                "& fieldset": { borderColor: "#666" },
-                "&:hover fieldset": { borderColor: "#90caf9" },
-                "&.Mui-focused fieldset": { borderColor: "#42a5f5" },
-              },
-            }}
-          />
+            <TextField
+              label="البريد الإلكتروني"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              variant="outlined"
+              fullWidth
+              margin="normal"
+              InputLabelProps={{ style: { color: "#ccc" } }}
+              InputProps={{ style: { color: "#000000ff" } }}
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": { borderColor: "#666" },
+                  "&:hover fieldset": { borderColor: "#90caf9" },
+                  "&.Mui-focused fieldset": { borderColor: "#42a5f5" },
+                },
+              }}
+            />
 
-          <TextField
-            label="كلمة المرور"
-            type="password"
-            variant="outlined"
-            fullWidth
-            margin="normal"
-            InputLabelProps={{ style: { color: "#ccc" } }}
-            InputProps={{ style: { color: "#fff" } }}
-            sx={{
-              "& .MuiOutlinedInput-root": {
-                "& fieldset": { borderColor: "#666" },
-                "&:hover fieldset": { borderColor: "#90caf9" },
-                "&.Mui-focused fieldset": { borderColor: "#42a5f5" },
-              },
-            }}
-          />
+            <TextField
+              label="كلمة المرور"
+              name="password"
+              type="password"
+              value={formData.password}
+              onChange={handleChange}
+              variant="outlined"
+              fullWidth
+              margin="normal"
+              InputLabelProps={{ style: { color: "#ccc" } }}
+              InputProps={{ style: { color: "#000000ff" } }}
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": { borderColor: "#666" },
+                  "&:hover fieldset": { borderColor: "#90caf9" },
+                  "&.Mui-focused fieldset": { borderColor: "#42a5f5" },
+                },
+              }}
+            />
 
-          <TextField
-            label="تأكيد كلمة المرور"
-            type="password"
-            variant="outlined"
-            fullWidth
-            margin="normal"
-            InputLabelProps={{ style: { color: "#ccc" } }}
-            InputProps={{ style: { color: "#fff" } }}
-            sx={{
-              "& .MuiOutlinedInput-root": {
-                "& fieldset": { borderColor: "#666" },
-                "&:hover fieldset": { borderColor: "#90caf9" },
-                "&.Mui-focused fieldset": { borderColor: "#42a5f5" },
-              },
-            }}
-          />
+            <TextField
+              label="تأكيد كلمة المرور"
+              name="confirmPassword"
+              type="password"
+              value={formData.confirmPassword}
+              onChange={handleChange}
+              error={Boolean(errors.confirmPassword)}
+              helperText={errors.confirmPassword}
+              variant="outlined"
+              fullWidth
+              margin="normal"
+              InputLabelProps={{ style: { color: "#ccc" } }}
+              InputProps={{ style: { color: "#000000ff" } }}
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": { borderColor: "#414141ff" },
+                  "&:hover fieldset": { borderColor: "#90caf9" },
+                  "&.Mui-focused fieldset": { borderColor: "#42a5f5" },
+                },
+              }}
+            />
 
-          <Button
-            fullWidth
-            variant="contained"
-            sx={{
-              mt: 3,
-              py: 1.3,
-              background: "linear-gradient(90deg, #1976d2, #2196f3)",
-              fontWeight: "bold",
-              borderRadius: 2,
-              "&:hover": {
-                background: "linear-gradient(90deg, #1565c0, #1976d2)",
-              },
-            }}
-          >
-            إنشاء الحساب
-          </Button>
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{
+                mt: 3,
+                py: 1.3,
+                background: "linear-gradient(90deg, #1976d2, #2196f3)",
+                fontWeight: "bold",
+                borderRadius: 2,
+                "&:hover": {
+                  background: "linear-gradient(90deg, #1565c0, #1976d2)",
+                },
+              }}
+            >
+              إنشاء الحساب
+            </Button>
+          </form>
 
           <Typography
             align="center"
             sx={{ color: "#bbb", fontSize: 14, mt: 2 }}
           >
             لديك حساب بالفعل؟{" "}
-            <a href="#" style={{ color: "#90caf9", textDecoration: "none" }}>
+            <a
+              href="./Account"
+              style={{ color: "#90caf9", textDecoration: "none" }}
+            >
               تسجيل الدخول
             </a>
           </Typography>
